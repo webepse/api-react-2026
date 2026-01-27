@@ -30,4 +30,14 @@ const Pagination = (props) => {
     )
 }
 
+Pagination.getData = (items, currentPage, itemsPerPage) => {
+    const start = currentPage * itemsPerPage - itemsPerPage
+    //                      3         *     10       -  10      =   20
+    //     array.slice(start, end)
+    //      items.slice(20, (20+10)=30)
+    return items.slice(start, start + itemsPerPage)
+
+}
+
+
 export default Pagination;
