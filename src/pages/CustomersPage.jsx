@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import Axios from "axios";
 import Pagination from "../components/Pagination"
+import customersAPI from "../services/customersAPI";
 
 const CustomersPage = (props) => {
     const [customers, setCustomers] = useState([]);
@@ -12,13 +13,33 @@ const CustomersPage = (props) => {
     }
     const itemsPerPage = 10
 
+    const fetchCustomers = async () => {
+        try{
+            const data = await customersAPI.findAll()
+            setCustomers(data)
+        }catch(error){
+            // notif à faire
+            console.error(error.response)
+        }
+    }
 
     useEffect(() => {
-        Axios.get("http://127.0.0.1:8000/api/customers")
-            .then(response => response.data.member)
-            .then(data => setCustomers(data))
-            .catch(error => console.error(error.response));
+        fetchCustomers()
     },[])
+
+    const handleDelete = async (id) => {
+        // pessimiste
+        const orignalCustomers = [...customers]
+        // optimiste
+        setCustomers(customers.filter(customer => customer.id !== id))
+
+        try{
+            await customersAPI.delete(id)
+        }catch(error){
+            setCustomers(orignalCustomers)
+            // notif à faire
+        }
+    }
 
     const paginatedCustomers = Pagination.getData(customers, currentPage, itemsPerPage)
 
@@ -52,7 +73,7 @@ const CustomersPage = (props) => {
                         <td className="text-center">{customer.totalAmount.toLocaleString()}</td>
                         <td className="text-center">{customer.unpaidAmount.toLocaleString()}</td>
                         <td>
-                            <button className="btn btn-sm btn-danger">Supprimer</button>
+                            <button className="btn btn-sm btn-danger" onClick={() => handleDelete(customer.id)}>Supprimer</button>
                         </td>
                     </tr>
                 ))}
