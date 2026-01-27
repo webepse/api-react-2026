@@ -35,3 +35,6 @@ npm i react-router-dom
 ```
 npm i axios
 ```
+
+## installation de moment.js
+```npm install moment```
