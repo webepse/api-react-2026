@@ -7,6 +7,8 @@ const Pagination = (props) => {
         pages.push(i)
     }
 
+
+
     return (
         <div>
             <ul className="pagination pagination-sm justify-content-center">

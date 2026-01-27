@@ -45,6 +45,18 @@ const CustomerPageWithPagination = (props) => {
                 </tr>
                 </thead>
                 <tbody>
+                {/*
+                        A && B
+                        => si A est falsy -> js va retroune A
+                        => si A est truthy -> js retourne B
+                        true && "Hello" // "Hello"
+                        false && "Hello" // false
+                */}
+                {customers.length === 0 && (
+                    <tr>
+                        <td colSpan="8" className="text-center">Chargement ...</td>
+                    </tr>
+                )}
                 {customers.map(customer => (
                     <tr key={customer.id}>
                         <td>{customer.id}</td>
