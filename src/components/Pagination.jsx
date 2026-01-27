@@ -11,16 +11,16 @@ const Pagination = (props) => {
         <div>
             <ul className="pagination pagination-sm justify-content-center">
                 <li className={"page-item" + (props.currentPage === 1 ? " disabled" : null) }>
-                    <button className="page-link" onClick={() => null}>&laquo;</button>
+                    <button className="page-link" onClick={() => props.onPageChanged(props.currentPage - 1)}>&laquo;</button>
                 </li>
                 { pages.map(page => (
                     <li key={page} className={"page-item" + (props.currentPage === page ? " active" : null)}>
-                        <button className="page-link" onClick={() => null}>{page}</button>
+                        <button className="page-link" onClick={() => props.onPageChanged(page)}>{page}</button>
                     </li>
                 ))}
 
                 <li className={"page-item" + (props.currentPage === pageCount ? " disabled" : null) }>
-                    <button className="page-link" onClick={() => null}>&raquo;</button>
+                    <button className="page-link" onClick={() => props.onPageChanged(props.currentPage + 1)}>&raquo;</button>
                 </li>
             </ul>
 
