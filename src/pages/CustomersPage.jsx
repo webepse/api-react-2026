@@ -5,6 +5,7 @@ import customersAPI from "../services/customersAPI";
 
 const CustomersPage = (props) => {
     const [customers, setCustomers] = useState([]);
+    const [search, setSearch] = useState("")
 
     // pour la pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,6 +28,20 @@ const CustomersPage = (props) => {
         fetchCustomers()
     },[])
 
+    const handleSearch = event =>{
+        const value = event.currentTarget.value
+        setSearch(value)
+        setCurrentPage(1)
+    }
+
+    const filteredCustomers = customers.filter(c =>
+        c.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        c.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        c.email.toLowerCase().includes(search.toLowerCase()) ||
+        (c.company && c.company.toLowerCase().includes(search.toLowerCase()))
+
+    )
+
     const handleDelete = async (id) => {
         // pessimiste
         const orignalCustomers = [...customers]
@@ -41,12 +56,16 @@ const CustomersPage = (props) => {
         }
     }
 
-    const paginatedCustomers = Pagination.getData(customers, currentPage, itemsPerPage)
+    const paginatedCustomers = Pagination.getData(filteredCustomers, currentPage, itemsPerPage)
 
 
     return(
         <>
             <h1>Liste des clients</h1>
+            {/* filtre */}
+            <div className="form-group">
+                <input type="text" className="form-control" placeholder="Rechercher..." value={search} onChange={handleSearch} />
+            </div>
             <table className="table table-hover">
                 <thead>
                     <tr>
@@ -82,7 +101,7 @@ const CustomersPage = (props) => {
             <Pagination
                 currentPage={currentPage}
                 itemsPerPage={itemsPerPage}
-                length={customers.length}
+                length={filteredCustomers.length}
                 onPageChanged={handlePageChange}
             />
         </>
