@@ -10,6 +10,7 @@ import authAPI from "./services/authAPI";
 import {useState} from "react";
 import PrivateRoute from "./components/PrivateRoute";
 import AuthContext from "./contexts/AuthContext";
+import CustomerPage from "./pages/CustomerPage";
 
 authAPI.setup()
 
@@ -28,6 +29,11 @@ function App() {
                 <main className="container pt-5">
                     <Routes>
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/customers/:id" element={
+                            <PrivateRoute>
+                                <CustomerPage />
+                            </PrivateRoute>
+                        } />
                         <Route path="/customers" element={
                             <PrivateRoute>
                                 <CustomersPage />
