@@ -1,6 +1,7 @@
 import Field from "../components/forms/Field";
 import {useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
+import customersAPI from "../services/customersAPI";
 
 const CustomerPage  = () => {
     let {id= "new"} = useParams()
@@ -10,8 +11,7 @@ const CustomerPage  = () => {
         lastName: "",
         firstName: "",
         email: "",
-        company: "",
-        user: ""
+        company: ""
     })
 
     const [errors, setErrors] = useState({
@@ -21,8 +21,30 @@ const CustomerPage  = () => {
         company: ""
     })
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
+        console.log(customer)
+        try{
+            await customersAPI.create(customer)
+            navigate("/customers", {replace: true})
+        }catch({response}){
+            console.log(response)
+            const {violations} = response.data
+            if(violations){
+                const apiErrors = {
+                    lastName: "",
+                    firstName: "",
+                    email: "",
+                    company: ""
+                }
+                violations.forEach(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message
+                    }
+                )
+                setErrors(apiErrors)
+            }
+        }
+
     }
 
     const handleChange = (event) => {
