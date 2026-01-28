@@ -23,10 +23,10 @@ const Navbar = (props) => {
                             <a href="#" className="nav-link">Inscription</a>
                         </li>
                         <li className="nav-item">
-                            <a href="#" className="btn btn-success">Connexion</a>
+                            <NavLink to="/login" className="btn btn-success">Connexion</NavLink>
                         </li>
                         <li className="nav-item">
-                            <a href="#" className="btn btn-danger">Déconnexion</a>
+                            <button className="btn btn-danger">Déconnexion</button>
                         </li>
                     </ul>
                 </div>

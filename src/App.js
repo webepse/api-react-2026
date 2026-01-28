@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import CustomersPage from "./pages/CustomersPage";
 import CustomerPageWithPagination from "./pages/CustomerPageWithPagination";
 import InvoicesPage from "./pages/InvoicesPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/customers" element={<CustomersPage />} />
                     <Route path="/customerspage" element={<CustomerPageWithPagination />} />
                     <Route path="/invoices" element={<InvoicesPage />} />
+                    <Route path="/login" element={<LoginPage />} />
                 </Routes>
             </main>
         </Router>
