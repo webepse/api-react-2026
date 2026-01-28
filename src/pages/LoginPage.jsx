@@ -1,7 +1,9 @@
 import {useState} from 'react'
 import authAPI from '../services/authAPI'
+import {useNavigate} from 'react-router-dom'
 
-const LoginPage = () => {
+const LoginPage = (props) => {
+    const navigate = useNavigate()
 
     const [credentials, setCredentials] = useState({
         username: "",
@@ -15,6 +17,8 @@ const LoginPage = () => {
         try{
             await authAPI.authenticate(credentials)
             setError()
+            props.onLogin(true)
+            navigate("/customers", {replace: true})
         }catch(error){
             setError("Aucun compte ne possède cette adresse e-mail ou les informations ne correspondent pas")
         }
