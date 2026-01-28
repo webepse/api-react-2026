@@ -8,6 +8,7 @@ import InvoicesPage from "./pages/InvoicesPage";
 import LoginPage from "./pages/LoginPage";
 import authAPI from "./services/authAPI";
 import {useState} from "react";
+import PrivateRoute from "./components/PrivateRoute";
 
 authAPI.setup()
 
@@ -21,9 +22,21 @@ function App() {
             <main className="container pt-5">
                 <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/customers" element={<CustomersPage />} />
-                    <Route path="/customerspage" element={<CustomerPageWithPagination />} />
-                    <Route path="/invoices" element={<InvoicesPage />} />
+                    <Route path="/customers" element={
+                        <PrivateRoute isAuthenticated={isAuthenticated} >
+                            <CustomersPage />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/customerspage" element={
+                        <PrivateRoute isAuthenticated={isAuthenticated} >
+                            <CustomerPageWithPagination />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/invoices" element={
+                        <PrivateRoute isAuthenticated={isAuthenticated} >
+                            <InvoicesPage />
+                        </PrivateRoute>
+                    } />
                     <Route path="/login" element={<LoginPage onLogin={setIsAuthenticated} />} />
                 </Routes>
             </main>
