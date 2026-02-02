@@ -1,8 +1,117 @@
+import { useEffect, useState } from 'react'
+import invoicesAPI from "../services/invoicesAPI";
+import Field from "../components/forms/Field";
+import Select from "../components/forms/Select";
+import customersAPI from "../services/customersAPI";
+import {Link, useParams, useNavigate} from "react-router-dom";
+
+
 const InvoicePage = (props) => {
+
+    let {id = "new"} = useParams();
+    const navigate = useNavigate();
+    const [invoice, setInvoice] = useState({
+        amount: "",
+        customer: "",
+        status: "SENT"
+    });
+
+    const [customers, setCustomers] = useState([])
+
+    const [errors, setErrors] = useState({
+        amount: "",
+        customer: "",
+        status: ""
+    });
+
+    const [editing, setEditing] = useState(false);
+
+    // récup les clients
+    const fetchCustomers = async () => {
+        try{
+            const data = await customersAPI.findAll()
+            setCustomers(data)
+            if(id === "new") setInvoice({...invoice, customer: data[0].id})
+        }catch(error)
+        {
+            // notif à faire
+            navigate("/invoices", {replace: true})
+        }
+    }
+
+    // récup la facture
+    const fetchInvoice = async (id) => {
+        try{
+            const {amount, status, customer, chrono} = await invoicesAPI.find(id)
+            setInvoice({amount, status, customer: customer.id, chrono})
+        }catch(error)
+        {
+            // notif à faire
+            navigate("/invoices", {replace: true})
+        }
+    }
+
+    // récup la liste des client à chaque chargement du composant
+    useEffect(() => {
+        fetchCustomers()
+    },[])
+
+    // chargement en mode édition (deps : id)
+    useEffect(() => {
+        if(id !== "new")
+        {
+            setEditing(true)
+            fetchInvoice(id)
+        }
+    },[id])
+
+    const handleChange = (event) => {
+        const { name, value } = event.currentTarget;
+        setInvoice({...invoice, [name]: value})
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+    }
 
     return (
         <>
-
+            {editing ? <h1>Modifcation d'une facture</h1> : <h1>Création d'une facture</h1>}
+            <form onSubmit={handleSubmit}>
+                <Field
+                    name="amount"
+                    type="number"
+                    placeholder="Montant de la facture"
+                    label="Montant"
+                    onChange={handleChange}
+                    value={invoice.amount}
+                    error={errors.amount}
+                />
+                <Select
+                    name="customer"
+                    label="Client"
+                    value={invoice.customer}
+                    error={errors.customer}
+                    onChange={handleChange}
+                >
+                    {customers.map(customer => <option key={customer.id} value={customer.id}>{customer.firstName} {customer.lastName}</option>)}
+                </Select>
+                <Select
+                    name="status"
+                    label="Statut"
+                    value={invoice.status}
+                    error={errors.status}
+                    onChange={handleChange}
+                >
+                    <option value="SENT">Envoyée</option>
+                    <option value="PAID">Payée</option>
+                    <option value="CANCELED">Annulée</option>
+                </Select>
+                <div className="my-3">
+                    <button type="submit" className={"btn " + (editing ? "btn-warning" : "btn-success" )}>{editing ? "Modifier" : "Enregistrer"}</button>
+                    <Link to="/invoices" className="btn btn-secondary mx-2">Retour aux factures</Link>
+                </div>
+            </form>
         </>
     )
 
