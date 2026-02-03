@@ -38,3 +38,9 @@ npm i axios
 
 ## installation de moment.js
 ```npm install moment```
+
+## installation de jwt-decode 
+```npm i jwt-decode```
+
+## installation de toastify
+```npm install --save react-toastify```
