@@ -3,6 +3,7 @@ import Axios from "axios";
 import Pagination from "../components/Pagination"
 import customersAPI from "../services/customersAPI";
 import {Link} from "react-router-dom";
+import {toast} from "react-toastify";
 
 const CustomersPage = (props) => {
     const [customers, setCustomers] = useState([]);
@@ -20,7 +21,7 @@ const CustomersPage = (props) => {
             const data = await customersAPI.findAll()
             setCustomers(data)
         }catch(error){
-            // notif à faire
+            toast.error("Impossible de charges les clients")
             console.error(error.response)
         }
     }
@@ -51,9 +52,10 @@ const CustomersPage = (props) => {
 
         try{
             await customersAPI.delete(id)
+            toast.warning("Le client "+id+" a bien été supprimé")
         }catch(error){
             setCustomers(orignalCustomers)
-            // notif à faire
+            toast.error("La suppression du client n'a pas fonctionné")
         }
     }
 

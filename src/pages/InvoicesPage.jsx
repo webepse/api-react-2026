@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react'
 import moment from 'moment'
 import Pagination from '../components/Pagination'
 import {Link} from "react-router-dom";
+import {toast} from "react-toastify";
 
 const STATUS_LABELS = {
     PAID: 'Payée',
@@ -28,8 +29,22 @@ const InvoicesPage = (props) => {
             setInvoices(data)
         }catch(error)
         {
-            // notif à faire
+            toast.error("Impossible de charger les factures")
             console.error(error.response)
+        }
+    }
+
+    const handleDelete = async (id) => {
+        const orignalInvoices = [...invoices]
+        setInvoices(invoices.filter(invoice => invoice.id !== id))
+
+        try{
+            await invoicesAPI.delete(id)
+            toast.warning("La facture "+id+" a bien été supprimée")
+        }catch(error)
+        {
+            setInvoices(orignalInvoices)
+            toast.error("Impossible de supprimer cette facture")
         }
     }
 
@@ -94,7 +109,7 @@ const InvoicesPage = (props) => {
                         <td className="text-center">{invoice.amount.toLocaleString()}</td>
                         <td className="text-center">
                             <Link to={`/invoices/${invoice.id}`} className="btn btn-warning mx-2">Modifier</Link>
-                            <button className="btn btn-danger mx-2">Supprimer</button>
+                            <button onClick={() => handleDelete(invoice.id)} className="btn btn-danger mx-2">Supprimer</button>
                         </td>
                     </tr>
                 ))}
