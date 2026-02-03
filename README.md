@@ -44,3 +44,6 @@ npm i axios
 
 ## installation de toastify
 ```npm install --save react-toastify```
+
+## installation de content Loader
+```npm i react-content-loader --save```

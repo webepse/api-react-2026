@@ -4,6 +4,7 @@ import moment from 'moment'
 import Pagination from '../components/Pagination'
 import {Link} from "react-router-dom";
 import {toast} from "react-toastify";
+import TableLoader from "../components/loaders/TableLoader";
 
 const STATUS_LABELS = {
     PAID: 'Payée',
@@ -23,10 +24,14 @@ const InvoicesPage = (props) => {
     const [search, setSearch] = useState("")
     const itemsPerPage = 10
 
+    // pour le chargement
+    const [loading, setLoading] = useState(true)
+
     const fetchInvoice = async () => {
         try{
             const data = await invoicesAPI.findAll()
             setInvoices(data)
+            setLoading(false)
         }catch(error)
         {
             toast.error("Impossible de charger les factures")
@@ -84,43 +89,50 @@ const InvoicesPage = (props) => {
             <div className="form-group my-3">
                 <input type="text" className="form-control" placeholder="Rechercher..." value={search} onChange={handleSearch} />
             </div>
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th className="text-center">Numéro</th>
-                        <th className="text-center">Client</th>
-                        <th className="text-center">Date</th>
-                        <th className="text-center">Statut</th>
-                        <th className="text-center">Montant</th>
-                        <th className="text-center"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                {paginatedInvoices.map((invoice) => (
-                    <tr key={invoice.id}>
-                        <td className="text-center">{invoice.id}</td>
-                        <td className="text-center">{invoice.customer.firstName} {invoice.customer.lastName}</td>
-                        <td className="text-center">{formatDate(invoice.sentAt)}</td>
-                        <td className="text-center">
+            {(!loading) ? (
+                <>
+                    <table className="table table-hover">
+                        <thead>
+                        <tr>
+                            <th className="text-center">Numéro</th>
+                            <th className="text-center">Client</th>
+                            <th className="text-center">Date</th>
+                            <th className="text-center">Statut</th>
+                            <th className="text-center">Montant</th>
+                            <th className="text-center"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {paginatedInvoices.map((invoice) => (
+                            <tr key={invoice.id}>
+                                <td className="text-center">{invoice.id}</td>
+                                <td className="text-center">{invoice.customer.firstName} {invoice.customer.lastName}</td>
+                                <td className="text-center">{formatDate(invoice.sentAt)}</td>
+                                <td className="text-center">
                             <span className={`badge text-bg-${STATUS_CLASSES[invoice.status]}`}>
                                 {STATUS_LABELS[invoice.status]}
                             </span>
-                        </td>
-                        <td className="text-center">{invoice.amount.toLocaleString()}</td>
-                        <td className="text-center">
-                            <Link to={`/invoices/${invoice.id}`} className="btn btn-warning mx-2">Modifier</Link>
-                            <button onClick={() => handleDelete(invoice.id)} className="btn btn-danger mx-2">Supprimer</button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
-            <Pagination
-                currentPage = {currentPage}
-                itemsPerPage = {itemsPerPage}
-                length = {filteredInvoices.length}
-                onPageChanged = {handlePageChange}
-            />
+                                </td>
+                                <td className="text-center">{invoice.amount.toLocaleString()}</td>
+                                <td className="text-center">
+                                    <Link to={`/invoices/${invoice.id}`} className="btn btn-warning mx-2">Modifier</Link>
+                                    <button onClick={() => handleDelete(invoice.id)} className="btn btn-danger mx-2">Supprimer</button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                    <Pagination
+                        currentPage = {currentPage}
+                        itemsPerPage = {itemsPerPage}
+                        length = {filteredInvoices.length}
+                        onPageChanged = {handlePageChange}
+                    />
+                </>
+            ) : (
+                <TableLoader />
+            )}
+
         </>
     )
 }
