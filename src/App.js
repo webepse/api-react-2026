@@ -13,6 +13,8 @@ import AuthContext from "./contexts/AuthContext";
 import CustomerPage from "./pages/CustomerPage";
 import InvoicePage from "./pages/InvoicePage";
 import RegisterPage from "./pages/RegisterPage";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 authAPI.setup()
 
@@ -61,6 +63,7 @@ function App() {
                     </Routes>
                 </main>
             </Router>
+            <ToastContainer position="bottom-left" />
         </AuthContext.Provider>
   );
 }
