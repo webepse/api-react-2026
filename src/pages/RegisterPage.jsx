@@ -2,6 +2,7 @@ import Field from "../components/forms/Field";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useState} from "react";
+import { toast } from "react-toastify";
 
 const RegisterPage = (props) => {
 
@@ -39,6 +40,7 @@ const RegisterPage = (props) => {
         try{
             await Axios.post("http://127.0.0.1:8000/api/users", user)
             setErrors({})
+            toast.success("Vous êtes inscrit, vous pouvez vous connecter")
             navigate("/login", {replace: true})
         }catch({response}){
             const {violations} = response.data
@@ -48,6 +50,7 @@ const RegisterPage = (props) => {
                 })
                 setErrors(apiErrors)
             }
+            toast.error("Une erreur est survenue")
         }
     }
 

@@ -3,6 +3,7 @@ import authAPI from '../services/authAPI'
 import {useNavigate} from 'react-router-dom'
 import AuthContext from '../contexts/AuthContext'
 import Field from '../components/forms/Field'
+import { toast} from "react-toastify";
 
 const LoginPage = (props) => {
     const navigate = useNavigate()
@@ -21,6 +22,7 @@ const LoginPage = (props) => {
             await authAPI.authenticate(credentials)
             setError()
             setIsAuthenticated(true)
+            toast.success("Vous êtes connecté")
             navigate("/customers", {replace: true})
         }catch(error){
             setError("Aucun compte ne possède cette adresse e-mail ou les informations ne correspondent pas")
