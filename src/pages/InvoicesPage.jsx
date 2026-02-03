@@ -93,7 +93,7 @@ const InvoicesPage = (props) => {
                         </td>
                         <td className="text-center">{invoice.amount.toLocaleString()}</td>
                         <td className="text-center">
-                            <Link to={`/invoices/${invoice.id}`} className="btn btn-success mx-2">Modifier</Link>
+                            <Link to={`/invoices/${invoice.id}`} className="btn btn-warning mx-2">Modifier</Link>
                             <button className="btn btn-danger mx-2">Supprimer</button>
                         </td>
                     </tr>

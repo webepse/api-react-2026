@@ -12,6 +12,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import AuthContext from "./contexts/AuthContext";
 import CustomerPage from "./pages/CustomerPage";
 import InvoicePage from "./pages/InvoicePage";
+import RegisterPage from "./pages/RegisterPage";
 
 authAPI.setup()
 
@@ -30,6 +31,7 @@ function App() {
                 <main className="container pt-5">
                     <Routes>
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/register" element={<RegisterPage />} />
                         <Route path="/customers/:id" element={
                             <PrivateRoute>
                                 <CustomerPage />
