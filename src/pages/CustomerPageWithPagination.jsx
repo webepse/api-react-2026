@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import Axios from "axios";
 import Pagination from "../components/Pagination";
+import { CUSTOMERS_API } from "../config";
 
 const CustomerPageWithPagination = (props) => {
     const [customers, setCustomers] = useState([]);
@@ -18,7 +19,7 @@ const CustomerPageWithPagination = (props) => {
     }
 
     useEffect(() => {
-        Axios.get(`http://127.0.0.1:8000/api/customers?pagination=true&count=${itemsPerPage}&page=${currentPage}`)
+        Axios.get(`${CUSTOMERS_API}?pagination=true&count=${itemsPerPage}&page=${currentPage}`)
             .then(response => {
                 setCustomers(response.data.member)
                 setTotalItems(response.data.totalItems)

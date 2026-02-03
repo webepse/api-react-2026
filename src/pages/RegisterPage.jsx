@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useState} from "react";
 import { toast } from "react-toastify";
+import { USERS_API } from "../config";
+
+
 
 const RegisterPage = (props) => {
 
@@ -38,7 +41,7 @@ const RegisterPage = (props) => {
             return
         }
         try{
-            await Axios.post("http://127.0.0.1:8000/api/users", user)
+            await Axios.post(USERS_API, user)
             setErrors({})
             toast.success("Vous êtes inscrit, vous pouvez vous connecter")
             navigate("/login", {replace: true})

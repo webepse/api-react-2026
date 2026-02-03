@@ -1,25 +1,26 @@
 import Axios from 'axios'
+import {INVOICES_API} from "../config";
 
 function findAll()
 {
-    return Axios.get(`http://127.0.0.1:8000/api/invoices`)
+    return Axios.get(INVOICES_API)
                 .then(response => response.data.member)
 }
 
 function deleteInvoice(id)
 {
-    return Axios.delete(`http://127.0.0.1:8000/api/invoices/${id}`)
+    return Axios.delete(`${INVOICES_API}/${id}`)
 }
 
 function find(id)
 {
-    return Axios.get(`http://127.0.0.1:8000/api/invoices/${id}`)
+    return Axios.get(`${INVOICES_API}/${id}`)
                 .then(response => response.data)
 }
 
 function createInvoice(invoice)
 {
-    return Axios.post(`http://127.0.0.1:8000/api/invoices`, {...invoice, customer:`api/customers/${invoice.customer}`})
+    return Axios.post(INVOICES_API, {...invoice, customer:`api/customers/${invoice.customer}`})
 }
 
 function updateInvoice(id, invoice)
@@ -28,7 +29,7 @@ function updateInvoice(id, invoice)
         'Content-Type': 'application/merge-patch+json'
     }
 
-    return Axios.patch(`http://127.0.0.1:8000/api/invoices/${id}`, {...invoice, customer:`api/customers/${invoice.customer}`}, {headers})
+    return Axios.patch(`${INVOICES_API}/${id}`, {...invoice, customer:`api/customers/${invoice.customer}`}, {headers})
 
 }
 
