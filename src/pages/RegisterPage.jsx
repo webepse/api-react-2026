@@ -27,8 +27,28 @@ const RegisterPage = (props) => {
         setUser({ ...user, [name]: value})
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
+        const apiErrors = {}
+        if(user.password !== user.passwordConfirm) {
+            apiErrors.passwordConfirm = "Votre confirmation de mot de passe n'est pas conforme à l'orignal"
+            setErrors(apiErrors)
+            // pour arrêter une fonction, on fait un return
+            return
+        }
+        try{
+            await Axios.post("http://127.0.0.1:8000/api/users", user)
+            setErrors({})
+            navigate("/login", {replace: true})
+        }catch({response}){
+            const {violations} = response.data
+            if(violations){
+                violations.forEach(({propertyPath, message}) => {
+                    apiErrors[propertyPath] = message;
+                })
+                setErrors(apiErrors)
+            }
+        }
     }
 
     return (
